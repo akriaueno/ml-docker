@@ -4,12 +4,13 @@ on:
   push:
     branches: [ main ]
     paths:
-      - 'cuda-jupyter/**'
+      - 'cuda-jupyter/Dockerfile'
+      - '**/.github/workflows/build-cuda-jupyter.yaml'
   pull_request:
     branches: [ main ]
     paths:
-      - 'cuda-jupyter/**'
-
+      - 'cuda-jupyter/Dockerfile'
+      - '**/.github/workflows/build-cuda-jupyter.yaml'
 jobs:
   build:
     runs-on: ubuntu-latest
