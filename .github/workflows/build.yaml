@@ -11,6 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
+        python_version: ['3.9', '3.10', '3.11', '3.12']
         include:
           # CUDA 11.8
           - cuda_version: '11.8.0'
@@ -26,7 +27,6 @@ jobs:
             ubuntu_version: '22.04'
           - cuda_version: '12.6.1'
             ubuntu_version: '24.04'
-        python_version: ['3.9', '3.10', '3.11', '3.12']
     steps:
       - uses: actions/checkout@v4
 
