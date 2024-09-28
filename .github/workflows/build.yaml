@@ -55,7 +55,7 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          platforms: linux/amd64,linux/arm64
+          platforms: linux/amd64
           tags: ghcr.io/${{ github.repository_owner }}/cuda-jupyter:${{ matrix.cuda_version }}-ubuntu${{ matrix.ubuntu_version }}-python${{ matrix.python_version }}
           build-args: |
             CUDA_VERSION=${{ matrix.cuda_version }}
