@@ -17,6 +17,7 @@ RUN add-apt-repository ppa:deadsnakes/ppa && \
     apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y \
     python${PYTHON_VERSION}-full \
+    python${PYTHON_VERSION}-dev \
     && rm -rf /var/lib/apt/lists/*
 
 RUN ln -s /usr/bin/python${PYTHON_VERSION} /usr/local/bin/python
