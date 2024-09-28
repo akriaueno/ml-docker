@@ -17,30 +17,16 @@ docker run -v workspace:/workspace -p 10000:8888 --rm --gpus all ghcr.io/akriaue
 Go to http://localhost:10000 and enter the token shown in the terminal.
 
 ## Check environment
-Open notebook in JupyterLab and check GPU information.
+Open notebook in JupyterLab and check CUDA and Python versions.
 
 ```python
-!nvidia-smi
+!nvcc --version
 !python3 --version
-+-----------------------------------------------------------------------------------------+
-| NVIDIA-SMI 560.35.03              Driver Version: 560.35.03      CUDA Version: 12.6     |
-|-----------------------------------------+------------------------+----------------------+
-| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
-| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
-|                                         |                        |               MIG M. |
-|=========================================+========================+======================|
-|   0  NVIDIA GeForce RTX xxxx ...    Off |   00000000:01:00.0 Off |                  N/A |
-|  0%   38C    P8              7W /  285W |       2MiB /  16376MiB |      0%      Default |
-|                                         |                        |                  N/A |
-+-----------------------------------------+------------------------+----------------------+
-                                                                                         
-+-----------------------------------------------------------------------------------------+
-| Processes:                                                                              |
-|  GPU   GI   CI        PID   Type   Process name                              GPU Memory |
-|        ID   ID                                                               Usage      |
-|=========================================================================================|
-|  No running processes found                                                             |
-+-----------------------------------------------------------------------------------------+
+nvcc: NVIDIA (R) Cuda compiler driver
+Copyright (c) 2005-2022 NVIDIA Corporation
+Built on Wed_Sep_21_10:33:58_PDT_2022
+Cuda compilation tools, release 11.8, V11.8.89
+Build cuda_11.8.r11.8/compiler.31833905_0
 Python 3.9.20
 ```
 
