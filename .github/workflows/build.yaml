@@ -12,8 +12,8 @@ jobs:
     strategy:
       matrix:
         python_version: ['3.9', '3.10', '3.11', '3.12']
-        cuda_version: []
-        ubuntu_version: []
+        cuda_version: ['11.8.0']
+        ubuntu_version: ['22.04']
         include:
           # CUDA 11.8
           - cuda_version: '11.8.0'
