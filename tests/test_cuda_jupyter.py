@@ -85,6 +85,28 @@ class TestCudaJupyterBuild:
         
         assert verify_result.returncode == 0, f"Failed to run container:\n{verify_result.stderr}"
         assert "Container is working" in verify_result.stdout, "Container test failed"
+        
+        # Verify Python version
+        python_check = subprocess.run([
+            "docker", "run", "--rm", "--platform", "linux/amd64",
+            "--entrypoint", "python", tag,
+            "-c", "import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}')"
+        ], capture_output=True, text=True, timeout=30)
+        
+        assert python_check.returncode == 0, f"Failed to check Python version:\n{python_check.stderr}"
+        assert python_version in python_check.stdout, f"Expected Python {python_version}, got: {python_check.stdout.strip()}"
+        
+        # Verify CUDA version
+        cuda_check = subprocess.run([
+            "docker", "run", "--rm", "--platform", "linux/amd64",
+            "--entrypoint", "bash", tag,
+            "-c", "nvcc --version | grep 'release' | sed 's/.*release //' | sed 's/,.*//'"
+        ], capture_output=True, text=True, timeout=30)
+        
+        assert cuda_check.returncode == 0, f"Failed to check CUDA version:\n{cuda_check.stderr}"
+        # CUDAバージョンの確認（メジャー・マイナーバージョンのみ）
+        cuda_version_short = '.'.join(cuda_version.split('.')[:2])
+        assert cuda_version_short in cuda_check.stdout, f"Expected CUDA {cuda_version_short}, got: {cuda_check.stdout.strip()}"
 
 
 @pytest.mark.cuda_jupyter
@@ -112,3 +134,22 @@ def test_minimal_cuda_jupyter_build(project_root, docker_build_timeout, cleanup_
         pytest.skip("Platform compatibility issue detected.")
         
     assert result.returncode == 0, f"Minimal build failed:\n{result.stderr}"
+    
+    # Verify the image runs
+    verify_result = subprocess.run([
+        "docker", "run", "--rm", "--platform", "linux/amd64",
+        "--entrypoint", "python", tag,
+        "-c", "print('Minimal test passed')"
+    ], capture_output=True, text=True, timeout=30)
+    
+    assert verify_result.returncode == 0
+    
+    # Verify Python version for minimal build  
+    python_check = subprocess.run([
+        "docker", "run", "--rm", "--platform", "linux/amd64",
+        "--entrypoint", "python", tag,
+        "-c", "import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}')"
+    ], capture_output=True, text=True, timeout=30)
+    
+    assert python_check.returncode == 0
+    assert "3.11" in python_check.stdout
