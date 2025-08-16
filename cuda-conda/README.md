@@ -85,6 +85,6 @@ ghcr.io/akriaueno/cuda-conda:11.8.0-ubuntu22.04-python3.9
 | 12.4.1       | ✓            | ✗            |
 | 12.6.3       | ✓            | ✓            |
 | 12.8.1       | ✓            | ✓            |
-| 12.9.0       | ✓            | ✗            |
+| 12.9.1       | ✓            | ✓            |
 
 Each CUDA version supports Python 3.8, 3.9, 3.10, 3.11, and 3.12 (Ubuntu 24.04 supports Python 3.9-3.12 only).
