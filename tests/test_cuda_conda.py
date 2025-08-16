@@ -93,6 +93,10 @@ class TestCudaCondaBuild:
             if "rosetta error" in result.stderr or "exec format error" in result.stderr:
                 pytest.skip("Platform compatibility issue detected. This test requires x86_64 architecture.")
             
+            # ネットワークエラーをチェック
+            if "CondaHTTPError" in result.stderr or "CONNECTION FAILED" in result.stderr:
+                pytest.skip(f"Network connectivity issue during build: {result.stderr[:500]}")
+            
             assert False, f"Build failed:\nCommand: {' '.join(build_cmd)}\nSTDOUT:\n{result.stdout}\nSTDERR:\n{result.stderr}"
         
         # Verify the image runs (basic test)
