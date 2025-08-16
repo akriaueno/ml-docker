@@ -65,3 +65,46 @@ def cleanup_docker_images():
             )
         except subprocess.TimeoutExpired:
             pass  # 削除に失敗しても続行
+
+
+def pytest_sessionfinish(session, exitstatus):
+    """Clean up all test Docker images after test session."""
+    # テスト用イメージを全て削除
+    try:
+        # cuda-condaテストイメージを検索して削除
+        result = subprocess.run(
+            ["docker", "images", "--format", "{{.Repository}}:{{.Tag}}", 
+             "--filter", "reference=cuda-conda-test:*"],
+            capture_output=True,
+            text=True,
+            timeout=10
+        )
+        if result.returncode == 0 and result.stdout:
+            images = result.stdout.strip().split('\n')
+            for image in images:
+                if image:
+                    subprocess.run(
+                        ["docker", "rmi", "-f", image],
+                        capture_output=True,
+                        timeout=30
+                    )
+        
+        # cuda-jupyterテストイメージを検索して削除
+        result = subprocess.run(
+            ["docker", "images", "--format", "{{.Repository}}:{{.Tag}}", 
+             "--filter", "reference=cuda-jupyter-test:*"],
+            capture_output=True,
+            text=True,
+            timeout=10
+        )
+        if result.returncode == 0 and result.stdout:
+            images = result.stdout.strip().split('\n')
+            for image in images:
+                if image:
+                    subprocess.run(
+                        ["docker", "rmi", "-f", image],
+                        capture_output=True,
+                        timeout=30
+                    )
+    except (subprocess.TimeoutExpired, Exception):
+        pass  # クリーンアップが失敗しても続行
