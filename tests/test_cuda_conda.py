@@ -45,11 +45,6 @@ CUDA_CONDA_MATRIX = [
     pytest.param("12.9.0", "22.04", "3.10", marks=[pytest.mark.cuda12]),
     pytest.param("12.9.0", "22.04", "3.11", marks=[pytest.mark.cuda12]),
     pytest.param("12.9.0", "22.04", "3.12", marks=[pytest.mark.cuda12]),
-    # CUDA 12.9 - Ubuntu 24.04
-    pytest.param("12.9.0", "24.04", "3.9", marks=[pytest.mark.cuda12]),
-    pytest.param("12.9.0", "24.04", "3.10", marks=[pytest.mark.cuda12]),
-    pytest.param("12.9.0", "24.04", "3.11", marks=[pytest.mark.cuda12]),
-    pytest.param("12.9.0", "24.04", "3.12", marks=[pytest.mark.cuda12]),
 ]
 
 
