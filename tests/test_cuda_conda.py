@@ -172,7 +172,7 @@ def test_minimal_cuda_conda_build(project_root, docker_build_timeout, cleanup_do
     if result.returncode != 0 and ("rosetta error" in result.stderr or "exec format error" in result.stderr):
         pytest.skip("Platform compatibility issue detected.")
         
-    assert result.returncode == 0, f"Minimal build failed:\n{result.stderr}"
+    assert result.returncode == 0, f"Minimal build failed:\nSTDOUT:\n{result.stdout}\nSTDERR:\n{result.stderr}"
     
     # Verify the image runs
     verify_result = subprocess.run([
