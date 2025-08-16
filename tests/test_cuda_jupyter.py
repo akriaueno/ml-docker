@@ -78,8 +78,9 @@ class TestCudaJupyterBuild:
         
         # Verify the image runs (basic test)
         verify_result = subprocess.run([
-            "docker", "run", "--rm", "--platform", "linux/amd64", tag, 
-            "python", "-c", "print('Container is working')"
+            "docker", "run", "--rm", "--platform", "linux/amd64", 
+            "--entrypoint", "python", tag, 
+            "-c", "print('Container is working')"
         ], capture_output=True, text=True, timeout=30)
         
         assert verify_result.returncode == 0, f"Failed to run container:\n{verify_result.stderr}"

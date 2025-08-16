@@ -84,8 +84,9 @@ class TestCudaCondaBuild:
         
         # Verify the image runs (basic test)
         verify_result = subprocess.run([
-            "docker", "run", "--rm", "--platform", "linux/amd64", tag, 
-            "python", "-c", "print('Container is working')"
+            "docker", "run", "--rm", "--platform", "linux/amd64", 
+            "--entrypoint", "/opt/conda/envs/ml/bin/python", tag, 
+            "-c", "print('Container is working')"
         ], capture_output=True, text=True, timeout=30)
         
         assert verify_result.returncode == 0, f"Failed to run container:\n{verify_result.stderr}"
@@ -117,3 +118,12 @@ def test_minimal_cuda_conda_build(project_root, docker_build_timeout, cleanup_do
         pytest.skip("Platform compatibility issue detected.")
         
     assert result.returncode == 0, f"Minimal build failed:\n{result.stderr}"
+    
+    # Verify the image runs
+    verify_result = subprocess.run([
+        "docker", "run", "--rm", "--platform", "linux/amd64",
+        "--entrypoint", "/opt/conda/envs/ml/bin/python", tag,
+        "-c", "print('Minimal test passed')"
+    ], capture_output=True, text=True, timeout=30)
+    
+    assert verify_result.returncode == 0, f"Failed to run container:\n{verify_result.stderr}"
