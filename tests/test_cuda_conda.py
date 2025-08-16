@@ -104,7 +104,7 @@ class TestCudaCondaBuild:
         # Verify the image runs (basic test)
         verify_result = subprocess.run([
             "docker", "run", "--rm", "--platform", "linux/amd64", 
-            "--entrypoint", "/opt/conda/envs/ml/bin/python", tag, 
+            tag, "/opt/conda/envs/ml/bin/python", 
             "-c", "print('Container is working')"
         ], capture_output=True, text=True, timeout=30)
         
@@ -114,7 +114,7 @@ class TestCudaCondaBuild:
         # Verify Python version
         python_check = subprocess.run([
             "docker", "run", "--rm", "--platform", "linux/amd64",
-            "--entrypoint", "/opt/conda/envs/ml/bin/python", tag,
+            tag, "/opt/conda/envs/ml/bin/python",
             "-c", "import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}')"
         ], capture_output=True, text=True, timeout=30)
         
@@ -124,7 +124,7 @@ class TestCudaCondaBuild:
         # Verify CUDA version
         cuda_check = subprocess.run([
             "docker", "run", "--rm", "--platform", "linux/amd64",
-            "--entrypoint", "bash", tag,
+            tag, "bash",
             "-c", "nvcc --version | grep 'release' | sed 's/.*release //' | sed 's/,.*//'"
         ], capture_output=True, text=True, timeout=30)
         
@@ -136,7 +136,7 @@ class TestCudaCondaBuild:
         # Verify conda is working
         conda_check = subprocess.run([
             "docker", "run", "--rm", "--platform", "linux/amd64",
-            "--entrypoint", "bash", tag,
+            tag, "bash",
             "-c", "source /opt/conda/etc/profile.d/conda.sh && conda activate ml && conda --version"
         ], capture_output=True, text=True, timeout=30)
         
@@ -146,7 +146,7 @@ class TestCudaCondaBuild:
         # Verify conda can install packages
         conda_install_check = subprocess.run([
             "docker", "run", "--rm", "--platform", "linux/amd64",
-            "--entrypoint", "bash", tag,
+            tag, "bash",
             "-c", "source /opt/conda/etc/profile.d/conda.sh && conda activate ml && conda install -y numpy --override-channels -c conda-forge && python -c 'import numpy; print(f\"NumPy {numpy.__version__} installed\")'"
         ], capture_output=True, text=True, timeout=120)
         
@@ -183,7 +183,7 @@ def test_minimal_cuda_conda_build(project_root, docker_build_timeout, cleanup_do
     # Verify the image runs
     verify_result = subprocess.run([
         "docker", "run", "--rm", "--platform", "linux/amd64",
-        "--entrypoint", "/opt/conda/envs/ml/bin/python", tag,
+        tag, "/opt/conda/envs/ml/bin/python",
         "-c", "print('Minimal test passed')"
     ], capture_output=True, text=True, timeout=30)
     
@@ -192,7 +192,7 @@ def test_minimal_cuda_conda_build(project_root, docker_build_timeout, cleanup_do
     # Verify Python version for minimal build
     python_check = subprocess.run([
         "docker", "run", "--rm", "--platform", "linux/amd64",
-        "--entrypoint", "/opt/conda/envs/ml/bin/python", tag,
+        tag, "/opt/conda/envs/ml/bin/python",
         "-c", "import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}')"
     ], capture_output=True, text=True, timeout=30)
     

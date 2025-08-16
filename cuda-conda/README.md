@@ -10,8 +10,20 @@ This repository contains a Dockerfile for building a CUDA-enabled Conda environm
 
 ## Usage
 
+### Interactive Shell
 ```bash
-docker run -v workspace:/workspace -p 10000:8888 --rm --gpus all ghcr.io/akriaueno/cuda-conda:11.8.0-ubuntu22.04-python3.9
+# Start an interactive bash session
+docker run -it --rm --gpus all ghcr.io/akriaueno/cuda-conda:11.8.0-ubuntu22.04-python3.9
+
+# Inside the container, activate conda environment
+conda activate ml
+```
+
+### JupyterLab
+```bash
+# Start JupyterLab server
+docker run -v $(pwd):/workspace -p 10000:8888 --rm --gpus all ghcr.io/akriaueno/cuda-conda:11.8.0-ubuntu22.04-python3.9 \
+    conda run -n ml jupyter lab --ip=0.0.0.0 --port=8888 --no-browser --allow-root
 ```
 
 Go to http://localhost:10000 and enter the token shown in the terminal.
@@ -50,7 +62,6 @@ https://hub.docker.com/r/nvidia/cuda
 ## Conda Environment
 
 The Docker image includes Miniconda3 with a dedicated conda environment named `ml`.
-This environment is automatically activated when the container starts.
 
 ## Image Tag
 
