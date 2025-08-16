@@ -26,10 +26,30 @@ CUDA_CONDA_MATRIX = [
     pytest.param("12.4.1", "22.04", "3.11", marks=[pytest.mark.cuda12]),
     pytest.param("12.4.1", "22.04", "3.12", marks=[pytest.mark.cuda12]),
     # CUDA 12.6 - Ubuntu 24.04
-    pytest.param("12.6.1", "24.04", "3.9", marks=[pytest.mark.cuda12]),
-    pytest.param("12.6.1", "24.04", "3.10", marks=[pytest.mark.cuda12]),
-    pytest.param("12.6.1", "24.04", "3.11", marks=[pytest.mark.cuda12]),
-    pytest.param("12.6.1", "24.04", "3.12", marks=[pytest.mark.cuda12]),
+    pytest.param("12.6.3", "24.04", "3.9", marks=[pytest.mark.cuda12]),
+    pytest.param("12.6.3", "24.04", "3.10", marks=[pytest.mark.cuda12]),
+    pytest.param("12.6.3", "24.04", "3.11", marks=[pytest.mark.cuda12]),
+    pytest.param("12.6.3", "24.04", "3.12", marks=[pytest.mark.cuda12]),
+    # CUDA 12.8 - Ubuntu 22.04
+    pytest.param("12.8.1", "22.04", "3.9", marks=[pytest.mark.cuda12]),
+    pytest.param("12.8.1", "22.04", "3.10", marks=[pytest.mark.cuda12]),
+    pytest.param("12.8.1", "22.04", "3.11", marks=[pytest.mark.cuda12]),
+    pytest.param("12.8.1", "22.04", "3.12", marks=[pytest.mark.cuda12]),
+    # CUDA 12.8 - Ubuntu 24.04
+    pytest.param("12.8.1", "24.04", "3.9", marks=[pytest.mark.cuda12]),
+    pytest.param("12.8.1", "24.04", "3.10", marks=[pytest.mark.cuda12]),
+    pytest.param("12.8.1", "24.04", "3.11", marks=[pytest.mark.cuda12]),
+    pytest.param("12.8.1", "24.04", "3.12", marks=[pytest.mark.cuda12]),
+    # CUDA 12.9 - Ubuntu 22.04
+    pytest.param("12.9.1", "22.04", "3.9", marks=[pytest.mark.cuda12]),
+    pytest.param("12.9.1", "22.04", "3.10", marks=[pytest.mark.cuda12]),
+    pytest.param("12.9.1", "22.04", "3.11", marks=[pytest.mark.cuda12]),
+    pytest.param("12.9.1", "22.04", "3.12", marks=[pytest.mark.cuda12]),
+    # CUDA 12.9 - Ubuntu 24.04
+    pytest.param("12.9.1", "24.04", "3.9", marks=[pytest.mark.cuda12]),
+    pytest.param("12.9.1", "24.04", "3.10", marks=[pytest.mark.cuda12]),
+    pytest.param("12.9.1", "24.04", "3.11", marks=[pytest.mark.cuda12]),
+    pytest.param("12.9.1", "24.04", "3.12", marks=[pytest.mark.cuda12]),
 ]
 
 
@@ -106,6 +126,26 @@ class TestCudaCondaBuild:
         # CUDAバージョンの確認（メジャー・マイナーバージョンのみ）
         cuda_version_short = '.'.join(cuda_version.split('.')[:2])
         assert cuda_version_short in cuda_check.stdout, f"Expected CUDA {cuda_version_short}, got: {cuda_check.stdout.strip()}"
+        
+        # Verify conda is working
+        conda_check = subprocess.run([
+            "docker", "run", "--rm", "--platform", "linux/amd64",
+            "--entrypoint", "bash", tag,
+            "-c", "source /opt/conda/etc/profile.d/conda.sh && conda activate ml && conda --version"
+        ], capture_output=True, text=True, timeout=30)
+        
+        assert conda_check.returncode == 0, f"Failed to check conda:\n{conda_check.stderr}"
+        assert "conda" in conda_check.stdout, f"Conda not found in output: {conda_check.stdout}"
+        
+        # Verify conda can install packages
+        conda_install_check = subprocess.run([
+            "docker", "run", "--rm", "--platform", "linux/amd64",
+            "--entrypoint", "bash", tag,
+            "-c", "source /opt/conda/etc/profile.d/conda.sh && conda activate ml && conda install -y numpy --override-channels -c conda-forge && python -c 'import numpy; print(f\"NumPy {numpy.__version__} installed\")'"
+        ], capture_output=True, text=True, timeout=120)
+        
+        assert conda_install_check.returncode == 0, f"Failed to install with conda:\n{conda_install_check.stderr}"
+        assert "NumPy" in conda_install_check.stdout and "installed" in conda_install_check.stdout, f"NumPy installation failed: {conda_install_check.stdout}"
 
 
 @pytest.mark.cuda_conda
