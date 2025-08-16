@@ -30,19 +30,20 @@ RUN ARCH=$(uname -m) && \
     rm ~/miniconda.sh && \
     ${CONDA_DIR}/bin/conda clean -a -y
 
-# Configure conda to use conda-forge channel (avoids ToS issues)
-RUN ${CONDA_DIR}/bin/conda config --add channels conda-forge && \
+# Configure conda to use only conda-forge channel (avoids ToS issues)
+RUN ${CONDA_DIR}/bin/conda config --remove channels defaults || true && \
+    ${CONDA_DIR}/bin/conda config --add channels conda-forge && \
     ${CONDA_DIR}/bin/conda config --set channel_priority strict
 
 # Create conda environment with specified Python version
-RUN ${CONDA_DIR}/bin/conda create -n ml python=${PYTHON_VERSION} -y --channel conda-forge && \
+RUN ${CONDA_DIR}/bin/conda create -n ml python=${PYTHON_VERSION} -y --override-channels --channel conda-forge && \
     echo "conda activate ml" >> ~/.bashrc
 
 # Install JupyterLab in the conda environment
 SHELL ["/bin/bash", "-c"]
 RUN source ${CONDA_DIR}/etc/profile.d/conda.sh && \
     conda activate ml && \
-    conda install -y jupyterlab -c conda-forge
+    conda install -y jupyterlab --override-channels -c conda-forge
 
 # Set working directory
 WORKDIR /workspace
