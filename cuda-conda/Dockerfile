@@ -8,16 +8,10 @@ ENV PYTHON_VERSION=${PYTHON_VERSION}
 
 # Install system dependencies
 RUN apt-get update && \
-    DEBIAN_FRONTEND=noninteractive apt-get install -y \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
     curl \
-    git \
     wget \
     ca-certificates \
-    libglib2.0-0 \
-    libxext6 \
-    libsm6 \
-    libxrender1 \
-    libgomp1 \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Miniconda

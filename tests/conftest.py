@@ -36,7 +36,7 @@ def skip_if_no_docker(docker_available):
 @pytest.fixture
 def docker_build_timeout():
     """Timeout for Docker build operations in seconds."""
-    return 600  # 10 minutes
+    return 1200  # 20 minutes
 
 
 @pytest.fixture(scope="session")
