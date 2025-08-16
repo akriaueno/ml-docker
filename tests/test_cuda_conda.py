@@ -7,24 +7,29 @@ from pathlib import Path
 
 # Test matrix for cuda-conda images
 CUDA_CONDA_MATRIX = [
-    # CUDA 11.8
+    # CUDA 11.8 - Ubuntu 22.04
     pytest.param("11.8.0", "22.04", "3.8", marks=[pytest.mark.cuda11]),
     pytest.param("11.8.0", "22.04", "3.9", marks=[pytest.mark.cuda11]),
     pytest.param("11.8.0", "22.04", "3.10", marks=[pytest.mark.cuda11]),
     pytest.param("11.8.0", "22.04", "3.11", marks=[pytest.mark.cuda11]),
     pytest.param("11.8.0", "22.04", "3.12", marks=[pytest.mark.cuda11]),
-    # CUDA 12.1
+    # CUDA 12.1 - Ubuntu 22.04
     pytest.param("12.1.1", "22.04", "3.8", marks=[pytest.mark.cuda12]),
     pytest.param("12.1.1", "22.04", "3.9", marks=[pytest.mark.cuda12]),
     pytest.param("12.1.1", "22.04", "3.10", marks=[pytest.mark.cuda12]),
     pytest.param("12.1.1", "22.04", "3.11", marks=[pytest.mark.cuda12]),
     pytest.param("12.1.1", "22.04", "3.12", marks=[pytest.mark.cuda12]),
-    # CUDA 12.4
+    # CUDA 12.4 - Ubuntu 22.04
     pytest.param("12.4.1", "22.04", "3.8", marks=[pytest.mark.cuda12]),
     pytest.param("12.4.1", "22.04", "3.9", marks=[pytest.mark.cuda12]),
     pytest.param("12.4.1", "22.04", "3.10", marks=[pytest.mark.cuda12]),
     pytest.param("12.4.1", "22.04", "3.11", marks=[pytest.mark.cuda12]),
     pytest.param("12.4.1", "22.04", "3.12", marks=[pytest.mark.cuda12]),
+    # CUDA 12.6 - Ubuntu 24.04
+    pytest.param("12.6.1", "24.04", "3.9", marks=[pytest.mark.cuda12]),
+    pytest.param("12.6.1", "24.04", "3.10", marks=[pytest.mark.cuda12]),
+    pytest.param("12.6.1", "24.04", "3.11", marks=[pytest.mark.cuda12]),
+    pytest.param("12.6.1", "24.04", "3.12", marks=[pytest.mark.cuda12]),
 ]
 
 
