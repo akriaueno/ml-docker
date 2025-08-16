@@ -75,3 +75,16 @@ ghcr.io/akriaueno/cuda-conda:11.8.0-ubuntu22.04-python3.9
 - JupyterLab pre-installed in the conda environment
 - Support for multiple CUDA, Ubuntu, and Python version combinations
 - Easy package management with conda/pip
+
+## Supported Versions
+
+| CUDA Version | Ubuntu 22.04 | Ubuntu 24.04 |
+|--------------|--------------|--------------|
+| 11.8.0       | ✓            | ✗            |
+| 12.1.1       | ✓            | ✗            |
+| 12.4.1       | ✓            | ✗            |
+| 12.6.3       | ✓            | ✓            |
+| 12.8.1       | ✓            | ✓            |
+| 12.9.1       | ✓            | ✓            |
+
+Each CUDA version supports Python 3.8, 3.9, 3.10, 3.11, and 3.12 (Ubuntu 24.04 supports Python 3.9-3.12 only).

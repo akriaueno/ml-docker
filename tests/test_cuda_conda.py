@@ -25,6 +25,12 @@ CUDA_CONDA_MATRIX = [
     pytest.param("12.4.1", "22.04", "3.10", marks=[pytest.mark.cuda12]),
     pytest.param("12.4.1", "22.04", "3.11", marks=[pytest.mark.cuda12]),
     pytest.param("12.4.1", "22.04", "3.12", marks=[pytest.mark.cuda12]),
+    # CUDA 12.6 - Ubuntu 22.04
+    pytest.param("12.6.3", "22.04", "3.8", marks=[pytest.mark.cuda12]),
+    pytest.param("12.6.3", "22.04", "3.9", marks=[pytest.mark.cuda12]),
+    pytest.param("12.6.3", "22.04", "3.10", marks=[pytest.mark.cuda12]),
+    pytest.param("12.6.3", "22.04", "3.11", marks=[pytest.mark.cuda12]),
+    pytest.param("12.6.3", "22.04", "3.12", marks=[pytest.mark.cuda12]),
     # CUDA 12.6 - Ubuntu 24.04
     pytest.param("12.6.3", "24.04", "3.9", marks=[pytest.mark.cuda12]),
     pytest.param("12.6.3", "24.04", "3.10", marks=[pytest.mark.cuda12]),
@@ -172,7 +178,7 @@ def test_minimal_cuda_conda_build(project_root, docker_build_timeout, cleanup_do
     if result.returncode != 0 and ("rosetta error" in result.stderr or "exec format error" in result.stderr):
         pytest.skip("Platform compatibility issue detected.")
         
-    assert result.returncode == 0, f"Minimal build failed:\n{result.stderr}"
+    assert result.returncode == 0, f"Minimal build failed:\nSTDOUT:\n{result.stdout}\nSTDERR:\n{result.stderr}"
     
     # Verify the image runs
     verify_result = subprocess.run([

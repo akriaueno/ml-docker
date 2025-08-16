@@ -36,14 +36,23 @@ RUN ${CONDA_DIR}/bin/conda config --remove channels defaults || true && \
     ${CONDA_DIR}/bin/conda config --set channel_priority strict
 
 # Create conda environment with specified Python version
-RUN ${CONDA_DIR}/bin/conda create -n ml python=${PYTHON_VERSION} -y --override-channels --channel conda-forge && \
-    echo "conda activate ml" >> ~/.bashrc
+# Retry logic for conda operations to handle intermittent network issues
+RUN for i in 1 2 3; do \
+        ${CONDA_DIR}/bin/conda create -n ml python=${PYTHON_VERSION} -y --override-channels --channel conda-forge && \
+        echo "conda activate ml" >> ~/.bashrc && \
+        break || \
+        (echo "Retry $i failed, waiting..." && sleep 10); \
+    done
 
 # Install JupyterLab in the conda environment
 SHELL ["/bin/bash", "-c"]
 RUN source ${CONDA_DIR}/etc/profile.d/conda.sh && \
     conda activate ml && \
-    conda install -y jupyterlab --override-channels -c conda-forge
+    for i in 1 2 3; do \
+        conda install -y jupyterlab --override-channels -c conda-forge && \
+        break || \
+        (echo "Retry $i failed, waiting..." && sleep 10); \
+    done
 
 # Set working directory
 WORKDIR /workspace
