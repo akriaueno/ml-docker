@@ -64,5 +64,3 @@ EXPOSE 8888
 ENV CONDA_DEFAULT_ENV=ml
 ENV CONDA_PREFIX=${CONDA_DIR}/envs/ml
 
-# Start JupyterLab with conda environment
-ENTRYPOINT ["conda", "run", "--no-capture-output", "-n", "ml", "jupyter", "lab", "--ip=0.0.0.0", "--port=8888", "--no-browser", "--allow-root"]
