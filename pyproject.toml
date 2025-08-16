@@ -1,0 +1,28 @@
+[project]
+name = "ml-docker"
+version = "0.1.0"
+description = "ML Docker images with CUDA support"
+requires-python = ">=3.9"
+dependencies = []
+
+[tool.uv]
+dev-dependencies = [
+    "pytest>=8.4.1",
+    "pytest-docker>=3.2.3",
+    "pytest-html>=4.1.1",
+    "pytest-timeout>=2.4.0",
+    "pytest-xdist>=3.8.0",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = "test_*.py"
+addopts = "-v --strict-markers --tb=short"
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "cuda11: CUDA 11.x specific tests",
+    "cuda12: CUDA 12.x specific tests",
+    "cuda_jupyter: Tests for cuda-jupyter images",
+    "cuda_conda: Tests for cuda-conda images",
+]
+timeout = 600
