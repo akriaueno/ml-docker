@@ -24,7 +24,14 @@ RUN apt-get update && \
 ENV CONDA_DIR=/opt/conda
 ENV PATH="${CONDA_DIR}/bin:${PATH}"
 
-RUN wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda.sh && \
+# Detect architecture and download appropriate Miniconda installer
+RUN ARCH=$(uname -m) && \
+    if [ "$ARCH" = "aarch64" ]; then \
+        MINICONDA_URL="https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-aarch64.sh"; \
+    else \
+        MINICONDA_URL="https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh"; \
+    fi && \
+    wget --quiet $MINICONDA_URL -O ~/miniconda.sh && \
     /bin/bash ~/miniconda.sh -b -p ${CONDA_DIR} && \
     rm ~/miniconda.sh && \
     ${CONDA_DIR}/bin/conda clean -a -y

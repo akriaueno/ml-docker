@@ -1,28 +1,32 @@
 # ml-docker
-Docker file/image for ML
 
-## Available Images
+Docker images for ML with CUDA support.
 
-### cuda-jupyter
-CUDA-enabled JupyterLab Docker images with Python virtual environment.
-- See [cuda-jupyter/README.md](cuda-jupyter/README.md) for details
+## Images
 
-### cuda-conda
-CUDA-enabled Conda environment Docker images with JupyterLab.
-- See [cuda-conda/README.md](cuda-conda/README.md) for details
+- **cuda-jupyter**: JupyterLab with Python venv ([details](cuda-jupyter/README.md))
+- **cuda-conda**: JupyterLab with Conda environment ([details](cuda-conda/README.md))
 
-## Local Testing
+## Quick Start
 
-### Quick Test
-Test a single configuration:
 ```bash
-./test/quick-test.sh cuda-conda 12.4.1 22.04 3.11
+# Use pre-built images
+docker run -p 8888:8888 --gpus all ghcr.io/akriaueno/cuda-conda:12.4.1-ubuntu22.04-python3.11
 ```
 
-### Comprehensive Test
-Test multiple configurations:
+## Testing
+
 ```bash
-./test/test-build.sh                    # Test all images
-./test/test-build.sh cuda-conda         # Test only cuda-conda
-./test/test-build.sh cuda-jupyter       # Test only cuda-jupyter
+# Setup (first time only)
+curl -LsSf https://astral.sh/uv/install.sh | sh
+uv sync
+
+# Run tests
+uv run pytest                    # All tests
+uv run pytest -n auto            # Parallel execution
+uv run pytest -m cuda_conda      # Only cuda-conda
+uv run pytest -m cuda_jupyter    # Only cuda-jupyter
+uv run pytest -k "12.4.1"        # Specific version
 ```
+
+**Note**: Tests are automatically skipped on Apple Silicon Macs as CUDA images require x86_64.
